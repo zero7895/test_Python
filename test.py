@@ -1,23 +1,25 @@
-import win32gui
-x,y=win32gui.GetCursorPos()
-print(x, y)
+import random
+import wx
 
+class Frame(wx.Frame):
+    def __init__(self):
+        super(Frame, self).__init__(None)
+        self.SetTitle('Title')
+        panel = wx.Panel(self)
+        style = wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE
+        self.text = wx.StaticText(panel, style=style)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.AddStretchSpacer(1)
+        sizer.Add(self.text, 0, wx.EXPAND)
+        sizer.AddStretchSpacer(1)
+        panel.SetSizer(sizer)
+        self.on_timer()
+    def on_timer(self):
+        self.text.SetLabel(str(random.randint(0, 100)))
+        wx.CallLater(1000, self.on_timer)
 
-#set cursor
-from ctypes import *
-
-#click cursor
-import win32api
-import win32con
-import time
-
-
-win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y)
-
-time.sleep(1)
-
-windll.user32.SetCursorPos(x+100, y)
-
-
-win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x+100, y)
-
+if __name__ == '__main__':
+    app = wx.App()
+    frame = Frame()
+    frame.Show()
+    app.MainLoop()
